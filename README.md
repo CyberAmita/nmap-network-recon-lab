@@ -245,3 +245,15 @@ Unlike `-sn`, which performs host discovery without port scanning, `-Pn` skips h
 
 ### Observation
 The scan identified the same 5 open ports as the basic scan because the target was already reachable. This demonstrated that `-Pn` changes the host discovery process, not the purpose of the port scan.
+
+## Aggressive Detection (`-A`)
+
+Command:
+```bash
+sudo nmap -A -p 135,445,902,912,5357 10.0.2.2
+```
+`-A` enables multiple enumeration features, including OS detection, service/version detection, default NSE scripts, and traceroute. I limited the scan to previously identified open ports rather than scanning the default port set again. Because -A performs broader enumeration and generates more traffic, I would use it when needed rather than as the default scan.
+
+### Observation
+The scan gathered service/version information, ran applicable NSE scripts, attempted OS fingerprinting, and performed traceroute in a single scan.
+The OS result remained uncertain because the scan conditions were not ideal, demonstrating that automated findings still need to be interpreted and validated.
