@@ -118,6 +118,7 @@ PORT      STATE   SERVICE
 995 TCP ports were filtered (no-response).
 ```
 By default, Nmap scans 1,000 commonly used TCP ports. This scan identified 5 open ports while the remaining 995 were filtered.
+
 When no scan type is specified, Nmap chooses an appropriate default TCP scan based on the available privileges. With raw-packet privileges, it typically uses a SYN scan (`-sS`); otherwise, it can use a TCP Connect scan (`-sT`).
 
 ## SYN Scan vs TCP Connect Scan
