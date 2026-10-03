@@ -121,6 +121,7 @@ PORT      STATE   SERVICE
 995 TCP ports were filtered (no-response).
 ```
 By default, Nmap scans 1,000 commonly used TCP ports. This scan identified 5 open ports while the remaining 995 were filtered.
+When no scan type is specified, Nmap chooses an appropriate default TCP scan based on the available privileges. With raw-packet privileges, it typically uses a SYN scan (`-sS`); otherwise, it can use a TCP Connect scan (`-sT`).
 
 ## SYN Scan vs TCP Connect Scan
 I compared two TCP scanning methods against the same host.
@@ -138,7 +139,7 @@ Command:
 ```bash
 nmap -sT 10.0.2.2
 ```
-A TCP Connect scan uses the operating system's `connect()` call and completes the TCP connection. It can be used when raw-packet privileges are not available.
+A TCP Connect scan uses the operating system's `connect()` call and completes the full TCP three-way handshake. It is useful when raw-packet privileges are not available. Because it establishes a full connection, it is generally easier for the target system or security monitoring tools to log than a SYN scan.
 
 ### Observation
 Both scans identified the same 5 open ports in this lab. The difference was not the result, but how the TCP connections were handled.
@@ -187,3 +188,49 @@ Without specifying `-p`, Nmap scans 1,000 commonly used TCP ports by default. Po
 - `-A` — Enable OS detection, version detection, default scripts, and traceroute.
 
 These options can be used or combined depending on the information required during the investigation.
+
+## NSE Scripts for Enumeration
+
+The Nmap Scripting Engine (NSE) extends Nmap beyond basic port scanning by enabling it to gather additional information from discovered services. NSE scripts can support service enumeration, security configuration checks, and vulnerability detection.
+
+### Default NSE Scripts (`-sC`)
+
+Command:
+```bash
+nmap -p 445 -sC 10.0.2.2
+```
+
+Result:
+```text
+Host script results:
+| smb2-security-mode:
+|   3:1:1:
+|_    Message signing enabled and required
+|
+| smb2-time:
+|_  ...
+```
+
+`-sC` runs applicable scripts from Nmap's default NSE script set. In this scan, Nmap selected multiple SMB-related scripts for port 445.
+
+### Specific NSE Script (`--script`)
+
+Command:
+```bash
+nmap -p 445 --script smb2-security-mode 10.0.2.2
+```
+
+Result:
+```text
+smb2-security-mode:
+|   3:1:1:
+|_    Message signing enabled and required
+```
+
+Using `--script` allows a specific NSE script to be selected instead of running the default script set.
+
+### Why NSE is Useful
+
+NSE scripts can provide information that basic port scanning cannot, such as service configuration details, protocol specifics, and potential security issues. This makes NSE useful during enumeration and vulnerability assessment.
+
+Script results should still be validated and should not automatically be treated as confirmed vulnerabilities.
