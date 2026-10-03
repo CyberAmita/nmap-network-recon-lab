@@ -25,7 +25,6 @@ All scanning in this project is performed only in an authorized lab environment.
 
 ## Nmap Version Verification
 Before beginning reconnaissance, I verified that Nmap was installed and available in my Kali Linux environment.
-
 Command:
 ```bash
 nmap --version
@@ -37,13 +36,11 @@ Platform: x86_64-pc-linux-gnu
 ```
 ## Network Identification
 Before starting the scan, I identified the active network interface and local network configuration using:
-
 Command:
 ```bash
 ip addr
 ```
 The active interface was `eth0` with the following IPv4 configuration:
-
 Result:
 ```text
 IPv4 Address: 10.0.2.15/24
@@ -55,12 +52,10 @@ The `/24` prefix indicates a subnet mask of `255.255.255.0`. This helped identif
 The first reconnaissance step was to identify active hosts on the local network before performing any port scanning.
 
 ### Host Discovery with `-sn`
-
 Command:
 ```bash
 nmap -sn 10.0.2.0/24
 ```
-
 Result:
 ```text
 Nmap scan report for 10.0.2.2
@@ -72,16 +67,15 @@ Host is up.
 
 Nmap done: 256 IP addresses (3 hosts up)
 ```
--sn performs host discovery without scanning ports. Without -sn, a standard Nmap scan typically scans the 1,000 most common TCP ports on active hosts.
+`-sn` performs host discovery without scanning ports. Without `-sn`, a standard Nmap scan typically scans the 1,000 most common TCP ports on active hosts.
 
 ### Understanding Why a Host Was Detected
 I repeated the discovery scan with the `--reason` option:
-
 Command:
 ```bash
 nmap -sn 10.0.2.0/24 --reason
 ```
---reason shows why Nmap considers a host up. In this scan, hosts were detected through ARP responses, while the Kali host was detected through a localhost response.
+`--reason` shows why Nmap considers a host up. In this scan, hosts were detected through ARP responses, while the Kali host was detected through a localhost response.
 
 ### Privileged vs. Unprivileged Scanning
 I also compared host discovery with and without `sudo`:
@@ -102,3 +96,22 @@ In this host-discovery test, using `sudo` did not change the discovered hosts. T
 
 ### Key Observation
 Host discovery provides a useful first step in reconnaissance because it identifies active systems before more detailed port and service enumeration.
+
+## Basic Port Scan
+I performed a standard Nmap scan against an active host.
+Command:
+```bash
+nmap 10.0.2.2
+```
+Result:
+```text
+PORT      STATE   SERVICE
+135/tcp   open    msrpc
+445/tcp   open    microsoft-ds
+902/tcp   open    iss-realsecure
+912/tcp   open    apex-mesh
+5357/tcp  open    wsdapi
+
+995 TCP ports were filtered (no-response).
+```
+By default, Nmap scans 1,000 commonly used TCP ports. This scan identified 5 open ports while the remaining 995 were filtered.
