@@ -99,6 +99,7 @@ Host discovery provides a useful first step in reconnaissance because it identif
 
 ## Basic Port Scan
 I performed a standard Nmap scan against an active host.
+
 Command:
 ```bash
 nmap 10.0.2.2
@@ -115,3 +116,24 @@ PORT      STATE   SERVICE
 995 TCP ports were filtered (no-response).
 ```
 By default, Nmap scans 1,000 commonly used TCP ports. This scan identified 5 open ports while the remaining 995 were filtered.
+
+## SYN Scan vs TCP Connect Scan
+I compared two TCP scanning methods against the same host.
+### SYN Scan (`-sS`)
+
+Command:
+```bash
+sudo nmap -sS 10.0.2.2
+```
+A SYN scan checks port states without normally completing the full TCP three-way handshake. It requires privileges that allow Nmap to send raw packets.
+
+### TCP Connect Scan (`-sT`)
+
+Command:
+```bash
+nmap -sT 10.0.2.2
+```
+A TCP Connect scan uses the operating system's `connect()` call and completes the TCP connection. It can be used when raw-packet privileges are not available.
+
+### Observation
+Both scans identified the same 5 open ports in this lab. The difference was not the result, but how the TCP connections were handled.
