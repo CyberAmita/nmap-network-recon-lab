@@ -234,3 +234,14 @@ Using `--script` allows a specific NSE script to be selected instead of running 
 NSE scripts can provide information that basic port scanning cannot, such as service configuration details, protocol specifics, and potential security issues. This makes NSE useful during enumeration and vulnerability assessment.
 
 Script results should still be validated and should not automatically be treated as confirmed vulnerabilities.
+
+### Skip Host Discovery (`-Pn`)
+
+Command:
+```bash
+nmap -Pn 10.0.2.2
+```
+Unlike `-sn`, which performs host discovery without port scanning, `-Pn` skips host discovery, treats the target as online, and proceeds with the port scan. It is useful when discovery probes are blocked or filtered.
+
+### Observation
+The scan identified the same 5 open ports as the basic scan because the target was already reachable. This demonstrated that `-Pn` changes the host discovery process, not the purpose of the port scan.
