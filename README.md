@@ -155,3 +155,35 @@ nmap -sV 10.0.2.2
 The basic scan revealed common service names associated with port numbers. With `-sV`, Nmap actively probed the open ports and identified services such as VMware Authentication Daemon and Microsoft HTTPAPI.
 
 This helps avoid assumptions based only on port numbers and provides better information for vulnerability analysis.
+
+## Port Selection
+Nmap allows the scan scope to be adjusted as needed.
+
+### Specific Ports
+
+Command:
+```bash
+nmap -p 445,902 10.0.2.2
+```
+
+`-p` scans only specified ports and is useful for targeted investigation.
+
+### All Ports
+
+Command:
+```bash
+nmap -p- 10.0.2.2
+```
+
+`-p-` scans all 65,535 TCP ports. It provides broader coverage but can take significantly longer, especially when ports do not respond.
+Without specifying `-p`, Nmap scans 1,000 commonly used TCP ports by default. Port ranges can also be specified, for example, `-p 1-1000` or `-p 1-65535`. Using `-p-` is a shorthand for scanning all ports from 1–65535.
+
+### Useful Options
+- `-sV` — Detect service and version information.
+- `-O` — Attempt operating system detection.
+- `-sC` — Run Nmap's default NSE scripts.
+- `--script <script>` — Run a specific NSE script or selected script category.
+- `--reason` — Show why Nmap determined a host or port state.
+- `-A` — Enable OS detection, version detection, default scripts, and traceroute.
+
+These options can be used or combined depending on the information required during the investigation.
