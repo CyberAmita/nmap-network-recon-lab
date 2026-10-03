@@ -257,3 +257,20 @@ sudo nmap -A -p 135,445,902,912,5357 10.0.2.2
 ### Observation
 The scan gathered service/version information, ran applicable NSE scripts, attempted OS fingerprinting, and performed traceroute in a single scan.
 The OS result remained uncertain because the scan conditions were not ideal, demonstrating that automated findings still need to be interpreted and validated.
+
+## Saving Scan Results
+
+Nmap scan results can be saved for later analysis and documentation.
+
+- `-oN` — Save output in normal Nmap format.
+- `-oX` — Save output in XML format.
+- `-oG` — Save output in grepable format.
+- `-oA` — Save results in all three major formats at once.
+
+Example:
+
+Command:
+```bash
+nmap -sV -p 445,902 -oA scan_results 10.0.2.2
+```
+`-oA` saves the scan in normal, XML, and grepable formats using the same filename. Saving scan results helps preserve findings for later analysis, documentation, and reporting.
