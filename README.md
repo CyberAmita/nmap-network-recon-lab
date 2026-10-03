@@ -25,6 +25,7 @@ All scanning in this project is performed only in an authorized lab environment.
 
 ## Nmap Version Verification
 Before beginning reconnaissance, I verified that Nmap was installed and available in my Kali Linux environment.
+
 Command:
 ```bash
 nmap --version
@@ -36,11 +37,13 @@ Platform: x86_64-pc-linux-gnu
 ```
 ## Network Identification
 Before starting the scan, I identified the active network interface and local network configuration using:
+
 Command:
 ```bash
 ip addr
 ```
 The active interface was `eth0` with the following IPv4 configuration:
+
 Result:
 ```text
 IPv4 Address: 10.0.2.15/24
@@ -52,6 +55,7 @@ The `/24` prefix indicates a subnet mask of `255.255.255.0`. This helped identif
 The first reconnaissance step was to identify active hosts on the local network before performing any port scanning.
 
 ### Host Discovery with `-sn`
+
 Command:
 ```bash
 nmap -sn 10.0.2.0/24
@@ -71,6 +75,7 @@ Nmap done: 256 IP addresses (3 hosts up)
 
 ### Understanding Why a Host Was Detected
 I repeated the discovery scan with the `--reason` option:
+
 Command:
 ```bash
 nmap -sn 10.0.2.0/24 --reason
@@ -137,3 +142,16 @@ A TCP Connect scan uses the operating system's `connect()` call and completes th
 
 ### Observation
 Both scans identified the same 5 open ports in this lab. The difference was not the result, but how the TCP connections were handled.
+
+## Service and Version Detection (`-sV`)
+After identifying open ports, I used `-sV` to identify the services and versions actually running on them.
+
+Command:
+```bash
+nmap -sV 10.0.2.2
+```
+
+### Observation
+The basic scan revealed common service names associated with port numbers. With `-sV`, Nmap actively probed the open ports and identified services such as VMware Authentication Daemon and Microsoft HTTPAPI.
+
+This helps avoid assumptions based only on port numbers and provides better information for vulnerability analysis.
